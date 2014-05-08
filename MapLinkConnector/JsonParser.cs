@@ -9,10 +9,10 @@ namespace MapLinkConnector
 {
     public class JsonParser
     {
-        public IList<Address> ParseListOfAddress(string addressList)
+        public List<Address> ParseListOfAddress(string addressList)
         {            
             JArray jsonArray = JArray.Parse(addressList);
-            IList<Address> addresses = jsonArray.Select(p => this.ParseAddress(p)).ToList();
+            List<Address> addresses = jsonArray.Select(p => this.ParseAddress(p)).ToList();
             return addresses;
         }
 

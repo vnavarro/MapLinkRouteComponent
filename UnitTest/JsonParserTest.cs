@@ -22,9 +22,9 @@ namespace UnitTest
         [TestMethod]            
         public void TestParseAddress()
         {
-            string address = @"{ street = 'Avenida Paulista', number = '1000', city = 'São Paulo', state = 'SP' }";
+            string address = @"{ street : 'Avenida Paulista', number : '1000', city : 'São Paulo', state : 'SP' }";
             Address parsedAddress = subject.ParseAddress(address);
-            Assert.IsInstanceOfType(address, typeof(Address));
+            Assert.IsInstanceOfType(parsedAddress, typeof(Address));
             Assert.AreEqual("Avenida Paulista", parsedAddress.street);
             Assert.AreEqual("1000", parsedAddress.houseNumber);
             Assert.AreEqual("São Paulo", parsedAddress.city.name);
@@ -34,9 +34,9 @@ namespace UnitTest
         [TestMethod]
         public void TestParseListOfAddress()
         {
-            string addressList = @"[{ street = 'Avenida Paulista', number = '1000', city = 'São Paulo', state = 'SP' }, 
-{ street = 'Avenida Brigadeiro Faria Lima', number = '1000', city = 'São Paulo', state = 'SP' }]";
-            IList<Address> parsedList = subject.ParseListOfAddressparse(addressList);
+            string addressList = @"[{ street : 'Avenida Paulista', number : '1000', city : 'São Paulo', state : 'SP' }, 
+{ street : 'Avenida Brigadeiro Faria Lima', number : '1000', city : 'São Paulo', state : 'SP' }]";
+            List<Address> parsedList = subject.ParseListOfAddress(addressList);
             Assert.AreEqual(parsedList.Count, 2);
         }
     }
