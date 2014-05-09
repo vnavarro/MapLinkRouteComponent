@@ -2,7 +2,13 @@
 
 ## Architecture
 
-This project was created using Visual Studio 2010, .NET Framework 4 and C#.
+This project was created using:  
+
+* Visual Studio 2010
+* .NET Framework 4
+* C#
+* [Nuget](http://www.nuget.org/) (package manager)
+* [JSON.net](http://james.newtonking.com/json)
 
 The solution is composed by three projects:  
 
@@ -12,25 +18,75 @@ The solution is composed by three projects:
 
 ### MapLinkConnector
 
-Receives a list of addresses and a route type described as following:  
-Address  
+The project contain the following classes:  
 
-* Street/avenue name
-* Number
-* City
-* State
+*Constants*  
+Hold any type of "magic" number. Is used for Route Type. Since only two numbers are used (0 and 23) there is no sense in using an enum structure beforehand.
 
-Route type  
+*JsonParser*  
+Conveninent structure to isolate json parsing.
 
-* Fastest route
-* Route avoiding traffic
+*Serializer*  
+Convenient structure to isolate object to json conversion.
 
-Then calculate a route based on it and return a set of data composed by:
+*Adapter Base*  
+An abastraction to in which we can insert common features to any connector to MapLink API. It currently stores the Token from app.config
 
-* Route total time
-* Route total distance
-* Fuel cost
-* Total cost, including tool fees.
+*AddressAdapter*   
+Responsible for MapLink Address endpoint.  
+It finds addresses from a json array of addresses.  
+The expected json format is as follows:
+
+```
+[{ 
+"street":"string",
+"number":"number",
+"city":"string",
+"state":"string"
+},
+{ 
+"street":"string",
+"number":"number",
+"city":"string",
+"state":"string"
+}
+....]
+```
+At least an origin and a destination must be informed.
+
+*RouteAdapter*  
+Responsible for MapLink Route endpoint.
+Expect a list of locations and calculates the routes total.
+
+The route type can be:
+* Fastest route - 0
+* Route avoiding traffic - 23
+
+The output json:
+```
+{
+"totalTime":"string",
+"totalDistance":"number",
+"totalFuel":"number",
+"totalCostWithToolFee":"number"
+}
+```
+
+#### Usage
+
+To retrieve totals
+
+
+```
+var locations = new AddressAdapter().FindAdresses(addressesJson);
+RouteAdapter routeAdapter = new RouteAdapter();
+var routes = routeAdapter.GenerateRoutes(locations);
+var totals = routeAdapter.Calculate(routes, routeType);
+
+return routeAdapter.RouteTotalsToJson(totals);
+```
+
+For error handling both AddressAdapter and RouteAdapter provide a ErrorMessage property string.
 
 ### UnitTest project
 
@@ -38,9 +94,53 @@ The Unit test project purpose is to ensure the MapLinkConnector works properly.
 
 ### RouteService
 
-Is a WCF service which has primarly one endpoint for route calculation. This endpoint receives the parameters as json and simply pass them into MapLinkConnector. Once the calculation is over the data is them returned to the caller. This endpoint is synchronous, that means it returns the calculation as its response.
+Is a WCF service which has primarly one endpoint for route calculation. This endpoint receives the parameters as json and simply pass them into MapLinkConnector. Once the calculation is over the data is them returned to the caller. This endpoint is synchronous, that means it returns the calculation as requested.
 
 The response is also returned as json.
+
+#### Endpoints
+
+It exposes two endpoints:
+
+* route/totals/sample
+* route/totals
+
+The former is a GET endpoint which can be used to test the Service, it has two hardcoded address and make a request to the later endpoint.
+
+The later is a POST endpoint which gives the route calculation result. 
+
+The expected json:
+```
+{
+"RouteType":"number", 
+"addresses":[{ 
+"street":"string",
+"number":"number",
+"city":"string",
+"state":"string"
+},
+{ 
+"street":"string",
+"number":"number",
+"city":"string",
+"state":"string"
+}]
+}
+```
+
+### Details
+
+MapLinkConnector is a library thus it can't load a app.config, it expects that the project using it to have a app.config and define proper configuration.
+
+Both UnitTest and RouteService have a app.config with the necessary configuration. Also there is an app.config file inside MapLinkConnector with minimum configuration.
+
+## Running and Deploy
+
+Running is as simple as opening the solution in visual studio and  executing RouteService. After that you can access the localhost address to check its working.  
+
+Something like localhost:52306/RouteService.svc/route/totals/sample
+
+To deploy it you will need to use Azure or other cloud service that supports WCF. Also the service may need proper release configuration file accordingly to your server specs.
 
 ## Licensing
 
