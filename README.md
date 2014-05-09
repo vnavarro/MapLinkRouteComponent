@@ -142,6 +142,14 @@ Something like localhost:52306/RouteService.svc/route/totals/sample
 
 To deploy it you will need to use Azure or other cloud service that supports WCF. Also the service may need proper release configuration file accordingly to your server specs.
 
+## Further improvements and other ideas
+
+There are two considerations that I think it should be made here:
+
+* Maybe this kind of library may be better implemented on other languages or structures, it worth a try.
+* There is this notion on Framework/Language Agnostic API, the idea is to code an API in ways that you could use it with any other language. A research paper which may help to walk this path is called 'Experiences from Developing a Component Technology
+Agnostic Adaptation Framework'
+
 ## Licensing
 
 The MIT License (MIT)
