@@ -21,8 +21,12 @@ namespace UnitTest
         [TestMethod]
         public void TestObjectToJson()
         {
-            JObject json = subject.ObjectToJson(new Object());
-            Assert.IsInstanceOfType(json, typeof(JObject));
+            var something = new
+            {
+                name = "hello"
+            };
+            string json = subject.ObjectToJson(something);
+            Assert.AreEqual(json, @"{""name"":""hello""}");
         }
     }
 }

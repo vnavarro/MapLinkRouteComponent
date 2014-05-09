@@ -13,8 +13,6 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		TraceAndTestImpact.testsettings = TraceAndTestImpact.testsettings
 	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ConsoleApplication1", "ConsoleApplication1\ConsoleApplication1.csproj", "{A175D8C7-417F-4BAB-88FC-A9C54B4A4C1B}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RouteService", "RouteService\RouteService.csproj", "{5A19E4AE-8902-4398-828D-0E9B0C5E3D15}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".nuget", ".nuget", "{754AD175-6A72-4A2E-9520-1CBF69F9C7FB}"
@@ -57,16 +55,6 @@ Global
 		{1789F9EE-3186-4F5D-9B79-8CC91E3B7AD1}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
 		{1789F9EE-3186-4F5D-9B79-8CC91E3B7AD1}.Release|Mixed Platforms.Build.0 = Release|Any CPU
 		{1789F9EE-3186-4F5D-9B79-8CC91E3B7AD1}.Release|x86.ActiveCfg = Release|Any CPU
-		{A175D8C7-417F-4BAB-88FC-A9C54B4A4C1B}.Debug|Any CPU.ActiveCfg = Debug|x86
-		{A175D8C7-417F-4BAB-88FC-A9C54B4A4C1B}.Debug|Mixed Platforms.ActiveCfg = Debug|x86
-		{A175D8C7-417F-4BAB-88FC-A9C54B4A4C1B}.Debug|Mixed Platforms.Build.0 = Debug|x86
-		{A175D8C7-417F-4BAB-88FC-A9C54B4A4C1B}.Debug|x86.ActiveCfg = Debug|x86
-		{A175D8C7-417F-4BAB-88FC-A9C54B4A4C1B}.Debug|x86.Build.0 = Debug|x86
-		{A175D8C7-417F-4BAB-88FC-A9C54B4A4C1B}.Release|Any CPU.ActiveCfg = Release|x86
-		{A175D8C7-417F-4BAB-88FC-A9C54B4A4C1B}.Release|Mixed Platforms.ActiveCfg = Release|x86
-		{A175D8C7-417F-4BAB-88FC-A9C54B4A4C1B}.Release|Mixed Platforms.Build.0 = Release|x86
-		{A175D8C7-417F-4BAB-88FC-A9C54B4A4C1B}.Release|x86.ActiveCfg = Release|x86
-		{A175D8C7-417F-4BAB-88FC-A9C54B4A4C1B}.Release|x86.Build.0 = Release|x86
 		{5A19E4AE-8902-4398-828D-0E9B0C5E3D15}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{5A19E4AE-8902-4398-828D-0E9B0C5E3D15}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{5A19E4AE-8902-4398-828D-0E9B0C5E3D15}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU

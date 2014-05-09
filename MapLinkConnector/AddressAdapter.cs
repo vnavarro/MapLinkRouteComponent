@@ -13,6 +13,7 @@ namespace MapLinkConnector
         private List<AddressLocation> lastLocations;
 
         public List<AddressLocation> LastLocations { get { return lastLocations; } }
+        public string ErrorMessage { get; set; }
 
         public AddressAdapter()
         {            
@@ -27,7 +28,18 @@ namespace MapLinkConnector
 
         public List<AddressLocation> FindAdresses(string addressList)
         {
-            List<Address> addresses = new JsonParser().ParseListOfAddress(addressList);
+            this.lastLocations.Clear();
+            this.ErrorMessage = String.Empty;
+            List<Address> addresses;
+            try
+            {
+                 addresses = new JsonParser().ParseListOfAddress(addressList);
+            }
+            catch
+            {
+                this.ErrorMessage = @"Please provide well formatted address json array.";
+                return this.lastLocations;
+            }
 
             var soapClient = new AddressFinderSoapClient();            
 
@@ -36,8 +48,17 @@ namespace MapLinkConnector
                 var findAddressResponse = soapClient
                     .findAddress(address, this.findAddressOptions, this.Token);
 
-                AddressLocation location = findAddressResponse.addressLocation.ToList().First();
-                this.lastLocations.Add(location);
+                List<AddressLocation> result = findAddressResponse.addressLocation.ToList();
+                if (result.Count > 0)
+                {
+                    AddressLocation location = result.First();
+                    this.lastLocations.Add(location);
+                }                
+            }
+
+            if(this.lastLocations.Count == 0)
+            {
+                this.ErrorMessage = @"Provided addresses not found.";
             }
             
             return this.lastLocations;

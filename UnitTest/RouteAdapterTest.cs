@@ -27,9 +27,9 @@ namespace UnitTest
                     street = "Avenida Jabaquara",
                     houseNumber = "100"
                 },
-                point = new Point(){
-                    x = -23.6267322,
-                    y = -46.6405497
+                point = new MapLinkConnector.MaplinkV3_AddressFinder.Point(){
+                    x = -46.6405497,
+                    y = -23.6267322
                 }                 
             };
             AddressLocation destination = new AddressLocation()
@@ -38,13 +38,14 @@ namespace UnitTest
                     street = "Avenida Jabaquara",
                     houseNumber = "1000"
                 },
-                point = new Point(){
-                    x = -23.6146506,
-                    y = -46.6374321
+                point = new MapLinkConnector.MaplinkV3_AddressFinder.Point()
+                {
+                    x = -46.6374321,
+                    y = -23.6146506
                 }                 
             };
 
-            List<AddressLocation> locations = new List<AddressLocation>();
+            locations = new List<AddressLocation>();
             locations.Add(origin);
             locations.Add(destination);
         }
@@ -54,7 +55,7 @@ namespace UnitTest
         {            
             var routes = subject.GenerateRoutes(locations);
             Assert.IsNotNull(routes);
-            Assert.AreEqual(routes.Count, 2);
+            Assert.AreEqual(routes.Count(), 2);
         }
 
         [TestMethod]
@@ -63,8 +64,17 @@ namespace UnitTest
             var routes                 = subject.GenerateRoutes(locations);
             var getRouteTotalsResponse = subject.Calculate(routes, Constants.ROUTE_TYPE_STANDARD_FASTEST);
 
-            Assert.IsNotNull(getRouteTotalsResponse);
+            Assert.AreEqual(subject.ErrorMessage, String.Empty);
             Assert.IsInstanceOfType(getRouteTotalsResponse, typeof(RouteTotals));
-        }        
+        }
+
+        [TestMethod]
+        public void TestCalculateWithEmptyParameters()
+        {
+            var routes = subject.GenerateRoutes(new List<AddressLocation>());
+            subject.Calculate(routes, Constants.ROUTE_TYPE_STANDARD_FASTEST);
+
+            Assert.AreNotEqual(subject.ErrorMessage, String.Empty);
+        }
     }
 }

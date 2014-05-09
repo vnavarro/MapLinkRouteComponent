@@ -10,6 +10,7 @@ namespace MapLinkConnector
 {
     public class RouteAdapter : AdapterBase
     {
+        public string ErrorMessage { get; set; }
         private RouteOptions routeOptions;
         private RouteOptions DefaultRouteOptions(int routeType)
         {
@@ -61,13 +62,22 @@ namespace MapLinkConnector
         } 
 
         public RouteTotals Calculate(RouteStop[] routes, int routeType)
-        {            
-            using (var routeSoapClient = new RouteSoapClient())
+        {
+            this.ErrorMessage = String.Empty;
+            try
             {
-                var getRouteTotalsResponse = routeSoapClient
-                    .getRouteTotals(routes, this.DefaultRouteOptions(routeType), this.Token);                
-                return getRouteTotalsResponse;
+                using (var routeSoapClient = new RouteSoapClient())
+                {
+                    var getRouteTotalsResponse = routeSoapClient
+                        .getRouteTotals(routes, this.DefaultRouteOptions(routeType), this.Token);
+                    return getRouteTotalsResponse;
+                }
             }
+            catch (System.ServiceModel.FaultException e)
+            {
+                this.ErrorMessage = e.Message;
+                return null;
+            }            
         }
 
         public string RouteTotalsToJson(RouteTotals totals)

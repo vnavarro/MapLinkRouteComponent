@@ -12,8 +12,7 @@ using System.IO;
 using System.ServiceModel.Channels;
 
 namespace RouteService
-{
-    // NOTE: You can use the "Rename" command on the "Refactor" menu to change the class name "RouteService" in code, svc and config file together.
+{    
     public class RouteService : IRouteService
     {
         public string RouteTotalsSample()
@@ -64,10 +63,22 @@ namespace RouteService
 
         private string CalculateRouteTotals(string addressesJson, int routeType)
         {
-            var locations = new AddressAdapter().FindAdresses(addressesJson);
+            AddressAdapter addressAdapter = new AddressAdapter();
+            var locations = addressAdapter.FindAdresses(addressesJson);
+            if (!String.IsNullOrEmpty(addressAdapter.ErrorMessage))
+            {
+                return addressAdapter.ErrorMessage;
+            }
+
             RouteAdapter routeAdapter = new RouteAdapter();
             var routes = routeAdapter.GenerateRoutes(locations);
             var totals = routeAdapter.Calculate(routes, routeType);
+
+            if (!String.IsNullOrEmpty(routeAdapter.ErrorMessage))
+            {
+                return routeAdapter.ErrorMessage;
+            }
+
             return routeAdapter.RouteTotalsToJson(totals);
         }
 

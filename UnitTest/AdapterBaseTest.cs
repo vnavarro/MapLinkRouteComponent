@@ -12,12 +12,6 @@ namespace UnitTest
     {
         private AdapterBase subject;
 
-        [TestInitialize]
-        public void BeforeEach()
-        {
-            System.Configuration.ConfigurationManager.AppSettings["MapLinkToken"] = "TOKEN"; 
-        }
-
         [TestMethod]
         public void TestTokenAfterInitialization()
         {
