@@ -8,8 +8,9 @@ namespace MapLinkConnector
 {
     public class Serializer
     {
-        public JObject ObjectToJson(object value){
-            return (JObject)JToken.FromObject(value);
+        public string ObjectToJson(object value){
+            JObject json = (JObject)JToken.FromObject(value);
+            return json.ToString(Newtonsoft.Json.Formatting.None);
         }               
     }
 }

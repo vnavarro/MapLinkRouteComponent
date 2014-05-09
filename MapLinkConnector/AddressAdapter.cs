@@ -4,7 +4,6 @@ using System.Linq;
 using System.Text;
 using MapLinkConnector.MaplinkV3_AddressFinder;
 using Newtonsoft.Json.Linq;
-using MapLinkConnector.MaplinkV3_Route;
 
 namespace MapLinkConnector
 {
@@ -42,20 +41,6 @@ namespace MapLinkConnector
             }
             
             return this.lastLocations;
-        }
-
-        public RouteStop[] GenerateRoutes()
-        {
-            List<RouteStop> routes = new List<RouteStop>();
-            this.lastLocations.ForEach(location =>
-                routes.Add(new RouteStop
-                {
-                    description = location.address.street + location.address.houseNumber,
-                    point = new MapLinkConnector.MaplinkV3_Route.Point { x = location.point.x, y = location.point.y }
-                })
-            );
-
-            return routes.ToArray();
         }        
     }
 }

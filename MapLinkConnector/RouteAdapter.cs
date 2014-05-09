@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using MapLinkConnector.MaplinkV3_AddressFinder;
 using MapLinkConnector.MaplinkV3_Route;
+using Newtonsoft.Json.Linq;
 
 namespace MapLinkConnector
 {
@@ -12,6 +13,12 @@ namespace MapLinkConnector
         private RouteOptions routeOptions;
         private RouteOptions DefaultRouteOptions(int routeType)
         {
+            if (routeType != Constants.ROUTE_TYPE_AVOID_TRAFFIC && 
+                routeType != Constants.ROUTE_TYPE_STANDARD_FASTEST)
+            {
+                routeType = Constants.ROUTE_TYPE_STANDARD_FASTEST;
+            }
+
             if (routeOptions == null)
             {
                 this.routeOptions = new RouteOptions
@@ -37,7 +44,21 @@ namespace MapLinkConnector
                 averageSpeed = 60,
                 tollFeeCat = 2
             };
-        }
+        }        
+
+        public RouteStop[] GenerateRoutes(List<AddressLocation> locations)
+        {
+            List<RouteStop> routes = new List<RouteStop>();
+            locations.ForEach(location =>
+                routes.Add(new RouteStop
+                {
+                    description = location.address.street + location.address.houseNumber,
+                    point = new MapLinkConnector.MaplinkV3_Route.Point { x = location.point.x, y = location.point.y }
+                })
+            );
+
+            return routes.ToArray();
+        } 
 
         public RouteTotals Calculate(RouteStop[] routes, int routeType)
         {            
@@ -47,6 +68,19 @@ namespace MapLinkConnector
                     .getRouteTotals(routes, this.DefaultRouteOptions(routeType), this.Token);                
                 return getRouteTotalsResponse;
             }
-        }        
+        }
+
+        public string RouteTotalsToJson(RouteTotals totals)
+        {
+            var simplifiedTotals = new
+            {
+                totalTime = totals.totalTime,
+                totalDistance = totals.totalDistance,
+                totalFuel = totals.totalFuelUsed,
+                totalCostWithToolFee = totals.totalCost
+            };
+
+            return new Serializer().ObjectToJson(simplifiedTotals);
+        }
     }
 }
